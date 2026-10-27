@@ -88,7 +88,7 @@ Printable mounts for the Pi, the camera and the front module are in [hardware/](
 ## How it works
 
 <p align="center">
-  <img src="docs/diagrams/architektura.svg" alt="System architecture" width="100%">
+  <img src="docs/images/architektura.png" alt="System architecture" width="100%">
 </p>
 
 The whole application is one systemd user service, `lpr.service`, started by `lpr_run.sh`. The main parts, in the order a frame meets them:

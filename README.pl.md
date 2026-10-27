@@ -88,7 +88,7 @@ Uchwyty do druku 3D (malinka, kamera, moduł z przodu) są w [hardware/](hardwar
 ## Jak to działa
 
 <p align="center">
-  <img src="docs/diagrams/architektura.svg" alt="Architektura systemu" width="100%">
+  <img src="docs/images/architektura.png" alt="Architektura systemu" width="100%">
 </p>
 
 Cała aplikacja to jedna usługa użytkownika systemd, `lpr.service`, uruchamiana przez `lpr_run.sh`. Najważniejsze elementy, w kolejności, w jakiej spotyka je klatka:
