@@ -2,9 +2,13 @@ import os as _os
 REPO = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "..", ".."))
 import harness, time, types, numpy as np, cv2
 from datetime import datetime
-from scene import scene, plate_img
+from scene import plate_img
+if _os.environ.get("LPR_DEMO_STYL") == "szafa":
+    from scene_szafa import scene
+else:
+    from scene import scene
 L = harness.lpr
-OUT = REPO + "/docs/images/"
+OUT = _os.environ.get("LPR_DEMO_OUT", REPO + "/docs/images/")
 def fake_user():
     u = types.SimpleNamespace(web_server=None, frame=None)
     u.set_frame = lambda f: setattr(u, "frame", f)

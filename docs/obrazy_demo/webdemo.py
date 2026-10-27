@@ -3,7 +3,10 @@ REPO = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "..", ".."))
 import sys, json, re, functools, cv2, numpy as np
 sys.path.insert(0, REPO + "/pi/narzedzia_testowe")
 import lpr_stub as S
-from scene import scene
+if _os.environ.get("LPR_DEMO_STYL") == "szafa":
+    from scene_szafa import scene
+else:
+    from scene import scene
 from http.server import ThreadingHTTPServer
 BODIES=[(52,70,98),(150,40,40),(200,200,205),(40,40,44),(70,110,80),(180,150,90)]
 @functools.lru_cache(maxsize=64)
@@ -25,6 +28,7 @@ def crop_jpg(txt,blur=0):
 S.full_jpg=full_jpg; S.crop_jpg=crop_jpg
 _sc("WA1234A"); S.BBOX[:]=list(_sc("WA1234A")[1])
 RADAR=[(63,"WX9021C",64,1),(58,"KX8821C",55,1),(71,None,None,None),(52,"SX4451E",49,1),(66,"PX55XYZ",70,1)]
+IMG=_os.environ.get("LPR_DEMO_OUT", REPO + "/docs/images/")
 orig=S.H.do_GET
 def do_GET(self):
     p=self.path.split("?")[0]
@@ -42,11 +46,11 @@ def do_GET(self):
         return self._send(json.dumps({"cfg":cfg,"stan":st,"zdarzenia":z}).encode())
     m=re.match(r"^/api/radar/plik/[\d-]+/r(\d)\.jpg$",p)
     if m:
-        img=cv2.imread(REPO + "/docs/images/radar_zdjecie.jpg")
+        img=cv2.imread(IMG + "radar_zdjecie.jpg")
         if "mini=1" in self.path: img=cv2.resize(img,(480,270))
         return self._send(cv2.imencode(".jpg",img)[1].tobytes(),"image/jpeg")
     if p in ("/stream","/api/snapshot","/api/focus-view"):
-        img=cv2.imread(REPO + "/docs/images/ekran_jazda.png")[40:440]
+        img=cv2.imread(IMG + "ekran_jazda.png")[40:440]
         return self._send(cv2.imencode(".jpg",img)[1].tobytes(),"image/jpeg")
     if p=="/api/watchlist":
         zn=[("WX5678K","Ania i Tomek"),("WX1020A","Tata · Octavia"),("KX4410M","Kuba"),("WX7733P","Babcia")]
