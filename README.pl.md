@@ -1,23 +1,41 @@
 <p align="center">
-  <img src="docs/images/banner.png" alt="PiLPR" width="720">
+  <img src="docs/images/hero.png" alt="PiLPR: ekran urządzenia i panel www w telefonie" width="100%">
 </p>
 
 <p align="center">
-  <b>Wideorejestrator na Raspberry Pi 5, który czyta tablice rejestracyjne, wie, które auta są dla ciebie ważne, i potrafi działać jak fotoradar.</b><br>
-  <a href="README.md">English version</a>
+  <a href="README.md">English version</a> &nbsp;·&nbsp;
+  <a href="#co-potrafi">Funkcje</a> &nbsp;·&nbsp;
+  <a href="#jak-to-działa">Jak to działa</a> &nbsp;·&nbsp;
+  <a href="#sprzęt">Sprzęt</a> &nbsp;·&nbsp;
+  <a href="#uruchomienie">Uruchomienie</a>
 </p>
 
----
+PiCamera, które na swoim ekranie przedstawia się jako PiLPR, zaczęło się od małego pomysłu. Kamera za szybą czyta tablice mijanych aut, a kiedy przejeżdżasz obok znajomych albo rodziny, daje ci znać, żebyś mógł do nich zadzwonić. Z tego wyrósł kompletny system do auta, który od miesięcy buduję i z którym jeżdżę.
 
-PiCamera (samo urządzenie przedstawia się jako PiLPR) zaczęło się od prostego pomysłu: kamera za szybą czyta tablice mijanych aut, a kiedy przejeżdżasz obok kogoś znajomego, dostajesz powiadomienie i możesz do niego zadzwonić. Z czasem wyrósł z tego kompletny system do auta. Nagrywa obraz jak każdy wideorejestrator, rozpoznaje tablice w czasie rzeczywistym na akceleratorze Hailo-10H, porównuje je z listami, które sam ustawiasz, czyta komunikaty na głos przez Bluetooth w samochodzie, a z małym radarem 24 GHz z przodu mierzy prędkość przejeżdżających aut i robi zdjęcie w stylu fotoradaru każdemu, kto jedzie za szybko.
+Nagrywa jak każdy wideorejestrator. Czyta tablice w czasie rzeczywistym na akceleratorze Hailo-10H i sprawdza je z listami, które prowadzisz sam. Mówi do ciebie przez Bluetooth w samochodzie. Z małym radarem 24 GHz z przodu mierzy prędkość przejeżdżających aut i robi zdjęcie w stylu fotoradaru każdemu, kto jedzie za szybko. To ostatni dodatek i wziął się stąd, że na moim osiedlu ludzie jeżdżą o wiele za szybko.
 
-Wszystko działa na samej malince. Nie ma chmury ani konta. Obsługa odbywa się z jej ekranu dotykowego albo z panelu www w telefonie.
+Wszystko działa na malince. Nie ma chmury ani konta, jest ekran dotykowy w aucie i panel www w telefonie.
 
-<p align="center">
-  <img src="docs/images/ekran_jazda.png" alt="Ekran urządzenia w czasie jazdy" width="49%">
-  <img src="docs/images/ekran_znajomi.png" alt="Trafienie z bazy" width="49%">
-</p>
-<p align="center"><sub>Ekran urządzenia narysowany przez kod projektu na syntetycznej scenie. Po lewej tablica potwierdzona kilkoma zgodnymi odczytami. Po prawej trafienie z listy „Znajomi”, ze zdjęciem auta i komunikatem głosowym.</sub></p>
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/ekran_znajomi.png" alt="Trafienie z bazy"></td>
+    <td width="50%"><img src="docs/images/radar_zdjecie.jpg" alt="Zdjęcie z fotoradaru"></td>
+  </tr>
+  <tr>
+    <td><b>Minąłeś kogoś znajomego.</b> Tablica z jednej z twoich list pojawia się jako baner ze zdjęciem auta, a malinka czyta komunikat na głos.</td>
+    <td><b>Kto dziś jechał najszybciej.</b> W trybie radaru każde auto powyżej progu dostaje zdjęcie z tablicą, prędkością, datą i godziną oraz krótki klip wideo.</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/images/www_panel.png" alt="Panel www"></td>
+    <td width="50%"><img src="docs/images/www_nagrania.png" alt="Nagrania z jazdy"></td>
+  </tr>
+  <tr>
+    <td><b>Każda tablica raz.</b> Panel www pokazuje podgląd na żywo i historię rozpoznanych tablic, a każdy odczyt można ocenić jako dobry albo zły, żeby wytrenować kolejny model.</td>
+    <td><b>I dalej wideorejestrator.</b> Ciągłe nagrywanie w minutowych segmentach, do przeglądania i odtwarzania z telefonu.</td>
+  </tr>
+</table>
+
+<sub>Wszystkie obrazy w tym opisie powstały bez prawdziwych nagrań i bez prawdziwych tablic, numery są zmyślone. Ekrany urządzenia rysuje własny kod projektu na syntetycznej scenie, szczegóły w <a href="docs/obrazy_demo">docs/obrazy_demo</a>.</sub>
 
 ## Co potrafi
 
@@ -27,6 +45,8 @@ Wszystko działa na samej malince. Nie ma chmury ani konta. Obsługa odbywa się
 
 **Bazy obserwowanych.** Dowolna liczba nazwanych list (na przykład Znajomi, Rodzina albo cokolwiek zaimportowanego z CSV), każda z własnym kolorem i szablonem komunikatu. Trafienie to baner i zdjęcie auta na ekranie oraz komunikat czytany głosem Piper. Dopasowanie jest najpierw dokładne, a potem odporne na znaki, które OCR najczęściej myli (0/O/D, 1/I, 5/S, 8/B). W tym drugim przypadku komunikat zaczyna się wprost od słowa „niepotwierdzony”.
 
+**Ostrzeganie przed nieoznakowanymi radiowozami.** Jedną z baz może być lista pojazdów służbowych, na przykład nieoznakowanych radiowozów. Trafienie daje ten sam alert na ekranie i głosem. Aplikacja nie zawiera żadnej takiej listy. Możesz zaimportować własną z pliku CSV.
+
 **Tryb fotoradaru.** Radar dopplerowski HLK-LD2415H na porcie szeregowym mierzy prędkość. Gdy auto przekroczy próg, system czeka na jego tablicę, sprawdza, czy tablica należy do auta zmierzonego przez radar, i zapisuje zdjęcie z naniesioną prędkością, datą, godziną i numerem, a do tego krótki klip z wideorejestratora z ramką, która jedzie za autem.
 
 **Weryfikacja i trening.** Każdy odczyt można oznaczyć jako dobry, poprawiony, niepełny, nieczytelny albo „to nie tablica”, w panelu www albo w aplikacji offline na Windows, która leży na tym samym pendrivie. Te oceny trafiają do skryptów treningowych kolejnych modeli OCR i detekcji.
@@ -34,21 +54,16 @@ Wszystko działa na samej malince. Nie ma chmury ani konta. Obsługa odbywa się
 ## Zrzuty ekranu
 
 <p align="center">
-  <img src="docs/images/www_panel.png" alt="Panel www" width="100%">
+  <img src="docs/images/ekran_jazda.png" alt="Ekran urządzenia" width="49%">
+  <img src="docs/images/ekran_radar.png" alt="Tryb radaru na urządzeniu" width="49%">
 </p>
-<p align="center"><sub>Panel www na laptopie: podgląd na żywo, historia tablic z pewnością, czasem śledzenia i przyciskami oceny, progi detekcji na dole.</sub></p>
+<p align="center"><sub>Ekran urządzenia w czasie jazdy i w trybie radaru: śledzone tablice, ostatnia potwierdzona tablica, bieżąca prędkość z radaru i statystyki systemu u góry.</sub></p>
 
 <p align="center">
   <img src="docs/images/www_bazy.png" alt="Bazy obserwowanych" width="49%">
   <img src="docs/images/www_radar.png" alt="Tryb radaru" width="49%">
 </p>
-<p align="center">
-  <img src="docs/images/www_nagrania.png" alt="Nagrania" width="49%">
-  <img src="docs/images/www_telefon.png" alt="Widok w telefonie" width="24%">
-</p>
-<p align="center"><sub>Edytor baz, zdarzenia radaru, nagrania z jazdy i panel w telefonie. Panel serwuje samo urządzenie i można go zainstalować jak aplikację.</sub></p>
-
-Wszystkie obrazy w tym opisie powstały bez prawdziwych nagrań i bez prawdziwych tablic, numery są zmyślone. Jak zostały zrobione, opisuje [docs/obrazy_demo](docs/obrazy_demo).
+<p align="center"><sub>Edytor baz i lista zdarzeń radaru w panelu www. Panel serwuje samo urządzenie i można go zainstalować w telefonie jak aplikację.</sub></p>
 
 ## Sprzęt
 
@@ -168,6 +183,7 @@ Numer rejestracyjny jest daną osobową w rozumieniu RODO, jeśli da się go pow
 
 - trzymaj dane na urządzeniu, nie publikuj zdjęć ani numerów innych ludzi i usuwaj to, czego nie potrzebujesz,
 - na listy wpisuj tylko osoby, które się na to zgodziły,
+- w listach, które udostępniasz innym, umieszczaj wyłącznie pojazdy służbowe instytucji, nigdy prywatne auta konkretnych osób (także policjantów), bo to dane osobowe,
 - tryb radaru traktuj jako pomiar ruchu na własnej ulicy, a nie jako egzekwowanie przepisów. Prywatny pomiar prędkości nie jest podstawą do mandatu, a wrzucanie do sieci zdjęć rozpoznawalnych kierowców samo w sobie może łamać prawo,
 - sprawdź przepisy o nagrywaniu dróg publicznych i urządzeniach w samochodzie w swoim kraju.
 

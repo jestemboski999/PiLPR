@@ -9,3 +9,4 @@ Wszystkie ilustracje w `docs/images` powstały bez prawdziwych nagrań i bez pra
 - `render_stl.html` + `stlshot.js` renderują pliki z `hardware/` przez three.js.
 
 Funkcje rysujące szukają czcionek VT323 i Press Start 2P (licencja OFL) w `/home/admin/hailo-apps/local_resources/web/`, tak jak na malince.
+- `hero.py` składa grafikę otwierającą README z renderu ekranu i zrzutu z telefonu (`python hero.py pl` lub `en`).

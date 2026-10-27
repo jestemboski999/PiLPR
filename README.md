@@ -1,23 +1,41 @@
 <p align="center">
-  <img src="docs/images/banner.png" alt="PiLPR" width="720">
+  <img src="docs/images/hero_en.png" alt="PiLPR: the device screen and the web panel on a phone" width="100%">
 </p>
 
 <p align="center">
-  <b>A Raspberry Pi 5 dashcam that reads licence plates, knows which cars matter to you, and can work as a speed camera.</b><br>
-  <a href="README.pl.md">Polska wersja</a>
+  <a href="README.pl.md">Polska wersja</a> &nbsp;·&nbsp;
+  <a href="#what-it-does">Features</a> &nbsp;·&nbsp;
+  <a href="#how-it-works">How it works</a> &nbsp;·&nbsp;
+  <a href="#hardware">Hardware</a> &nbsp;·&nbsp;
+  <a href="#running-it">Running it</a>
 </p>
 
----
+PiCamera, which calls itself PiLPR on its own screen, began with a small idea. A camera behind the windscreen reads the plates of passing cars, and when you drive past friends or family it tells you, so you can give them a call. It grew from there into a complete in-car system that I have been building and driving with for months.
 
-PiCamera (the device calls itself PiLPR) started as a simple idea: put a camera behind the windscreen, read the plates of passing cars, and get a heads-up when you drive past someone you know, so you can give them a call. Over time it grew into a complete in-car system. It records video like any dashcam, reads plates in real time on a Hailo-10H accelerator, matches them against lists you define, speaks alerts through the car's Bluetooth audio, and with a small 24 GHz radar module mounted at the front it measures the speed of passing cars and takes a speed-camera style photo of anyone over the limit.
+It records like any dashcam. It reads plates in real time on a Hailo-10H accelerator and checks them against lists you keep yourself. It speaks to you through the car's Bluetooth audio. With a small 24 GHz radar at the front it measures the speed of passing cars and takes a speed-camera style photo of anyone over the limit, which was the reason for the last addition: people drive far too fast through my neighbourhood.
 
-Everything runs on the Pi itself. There is no cloud service and no account. You talk to it through its own touch screen or through a web panel from your phone.
+Everything runs on the Pi. There is no cloud and no account, just the touch screen in the car and a web panel on your phone.
 
-<p align="center">
-  <img src="docs/images/ekran_jazda.png" alt="On-device view while driving" width="49%">
-  <img src="docs/images/ekran_znajomi.png" alt="Watchlist hit" width="49%">
-</p>
-<p align="center"><sub>The device screen, rendered by the project's own drawing code on a synthetic scene. Left: a plate confirmed by several agreeing reads. Right: a match from the "Friends" list, with a photo of the car and a spoken message.</sub></p>
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/ekran_znajomi.png" alt="Watchlist hit"></td>
+    <td width="50%"><img src="docs/images/radar_zdjecie.jpg" alt="Speed camera photo"></td>
+  </tr>
+  <tr>
+    <td><b>You passed someone you know.</b> A plate from one of your lists shows up as a banner with a photo of the car, and the Pi reads the message out loud.</td>
+    <td><b>Who was the fastest today.</b> In radar mode every car above the threshold gets a photo with its plate, speed, date and time, and a short video clip.</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/images/www_panel.png" alt="Web panel"></td>
+    <td width="50%"><img src="docs/images/www_nagrania.png" alt="Dashcam recordings"></td>
+  </tr>
+  <tr>
+    <td><b>Every plate, once.</b> The web panel shows the live view and the history of recognised plates, and lets you mark each reading as right or wrong to train the next model.</td>
+    <td><b>And still a dashcam.</b> Continuous recording in one-minute segments, browsable and playable from the phone.</td>
+  </tr>
+</table>
+
+<sub>All images in this README were made without real recordings or real plates; the plate numbers are invented. The device screens are drawn by the project's own rendering code on a synthetic scene, see <a href="docs/obrazy_demo">docs/obrazy_demo</a>.</sub>
 
 ## What it does
 
@@ -27,6 +45,8 @@ Everything runs on the Pi itself. There is no cloud service and no account. You 
 
 **Watchlists.** Any number of named lists (for example Friends, Family, or anything you import from a CSV), each with its own colour and its own spoken message template. A hit shows a banner and a photo of the car on screen and is read out through a Piper voice. Matching is exact first, and then tolerant of the characters OCR typically confuses (0/O/D, 1/I, 5/S, 8/B), in which case the message explicitly starts with "unconfirmed".
 
+**Unmarked police car warnings.** One of the lists can hold official vehicles, for example unmarked police cars. A hit gives the same alert on screen and by voice. The app ships with no such list; you can import your own from a CSV file.
+
 **Speed camera mode.** An HLK-LD2415H Doppler radar on the serial port measures speed. When a car exceeds the threshold, the system waits for its plate, checks that the plate belongs to the car the radar measured, and saves a photo with the speed, date, time and plate burnt in, plus a short clip from the dashcam with a box that follows the car.
 
 **Review and training loop.** Each reading can be marked as correct, corrected, partial, unreadable or not a plate, from the web panel or from an offline Windows viewer that lives on the same USB stick. Those verdicts feed the training scripts for the next OCR and detection models.
@@ -34,21 +54,16 @@ Everything runs on the Pi itself. There is no cloud service and no account. You 
 ## Screenshots
 
 <p align="center">
-  <img src="docs/images/www_panel.png" alt="Web panel" width="100%">
+  <img src="docs/images/ekran_jazda.png" alt="Device screen" width="49%">
+  <img src="docs/images/ekran_radar.png" alt="Radar mode on the device" width="49%">
 </p>
-<p align="center"><sub>Web panel on a laptop: live view, plate history with confidence, duration and review buttons, detection thresholds at the bottom.</sub></p>
+<p align="center"><sub>The device screen while driving and in radar mode: tracked plates, the latest confirmed plate, live speed from the radar, and system stats along the top.</sub></p>
 
 <p align="center">
   <img src="docs/images/www_bazy.png" alt="Watchlists" width="49%">
   <img src="docs/images/www_radar.png" alt="Radar mode" width="49%">
 </p>
-<p align="center">
-  <img src="docs/images/www_nagrania.png" alt="Dashcam recordings" width="49%">
-  <img src="docs/images/www_telefon.png" alt="Phone layout" width="24%">
-</p>
-<p align="center"><sub>Watchlist editor, radar events, dashcam segments, and the panel on a phone. The panel is served by the device and installs as a web app.</sub></p>
-
-All images in this README were generated without real recordings and without real plates. The plate numbers are made up. See [docs/obrazy_demo](docs/obrazy_demo) for how they were produced.
+<p align="center"><sub>The watchlist editor and the list of radar events in the web panel. The panel is served by the device itself and can be installed on a phone like an app.</sub></p>
 
 ## Hardware
 
@@ -170,6 +185,7 @@ A licence plate is personal data under the GDPR when it can be linked to a perso
 
 - keep the data on the device, do not publish photos or plates of other people, and delete what you do not need,
 - put only people who agreed to it on your lists,
+- in lists you share with others, include only institutions' official vehicles, never the private cars of specific people (police officers included), because that is personal data,
 - treat radar mode as a way to measure traffic on your own street, not as enforcement. A private speed measurement is not a legal basis for a fine, and sharing photos of identifiable drivers online can break the law on its own,
 - check the rules for recording public roads and for in-car devices in your country.
 

@@ -68,12 +68,12 @@
   <rect x="320" y="332" width="270" height="78" rx="8" fill="#f2f5fc" stroke="#c4cfea"/>
   <text x="336" y="358" class="t">OcrWorker</text>
   <text x="336" y="378" class="s">fast-plate-ocr (CPU) lub Hailo,</text>
-  <text x="336" y="394" class="s">deskew, korekta formatu PL</text>
+  <text x="336" y="394" class="s">tekst + pewność każdego znaku</text>
 
   <rect x="320" y="432" width="270" height="78" rx="8" fill="#f2f5fc" stroke="#c4cfea"/>
   <text x="336" y="458" class="t">Konsensus odczytów</text>
-  <text x="336" y="478" class="s">grupy Levenshtein ≤ 1, wagi wg</text>
-  <text x="336" y="494" class="s">wielkości tablicy, min. 3 zgodne</text>
+  <text x="336" y="478" class="s">grupy Levenshtein ≤ 1, wagi: pewność</text>
+  <text x="336" y="494" class="s">OCR i wielkość tablicy, min. 3 zgodne</text>
 
   <rect x="320" y="532" width="270" height="64" rx="8" fill="#f2f5fc" stroke="#c4cfea"/>
   <text x="336" y="558" class="t">SaveWorker</text>
