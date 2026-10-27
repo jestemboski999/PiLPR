@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5b6478"/>
+    </marker>
+    <style>
+      .t  { font-size: 15px; font-weight: 600; fill: #1c2230; }
+      .s  { font-size: 12.5px; fill: #4a5366; }
+      .h  { font-size: 12px; font-weight: 700; letter-spacing: .12em; fill: #7a8396; }
+      .ln { stroke: #5b6478; stroke-width: 1.6; fill: none; marker-end: url(#a); }
+      .dl { stroke: #9aa3b5; stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; marker-end: url(#a); }
+    </style>
+  </defs>
+  <rect width="1200" height="780" rx="14" fill="#f7f8fa"/>
+
+  <!-- kolumny -->
+  <text x="40" y="44" class="h">SPRZĘT</text>
+  <text x="330" y="44" class="h">RASPBERRY PI 5 · USŁUGA lpr.service (lpr.py)</text>
+  <text x="960" y="44" class="h">WYJŚCIA</text>
+  <rect x="300" y="60" width="610" height="690" rx="12" fill="#ffffff" stroke="#d9dde5"/>
+
+  <!-- sprzęt -->
+  <g>
+    <rect x="30" y="70" width="230" height="74" rx="9" fill="#e8eefb" stroke="#9db2e6"/>
+    <text x="46" y="98" class="t">Kamera Arducam IMX708</text>
+    <text x="46" y="118" class="s">HDR, obiektyw 25 mm, CSI</text>
+    <text x="46" y="134" class="s">2304×1296 @ 30 fps</text>
+
+    <rect x="30" y="164" width="230" height="74" rx="9" fill="#e8eefb" stroke="#9db2e6"/>
+    <text x="46" y="192" class="t">Hailo-10H (M.2)</text>
+    <text x="46" y="212" class="s">YOLOv8n, 5 klas, NMS na chipie</text>
+    <text x="46" y="228" class="s">opcjonalnie OCR (HEF)</text>
+
+    <rect x="30" y="258" width="230" height="74" rx="9" fill="#fdeee6" stroke="#eab295"/>
+    <text x="46" y="286" class="t">Radar HLK-LD2415H</text>
+    <text x="46" y="306" class="s">24 GHz Doppler, UART 9600</text>
+    <text x="46" y="322" class="s">sama prędkość, do ~180 m</text>
+
+    <rect x="30" y="352" width="230" height="74" rx="9" fill="#eef1f5" stroke="#bfc6d2"/>
+    <text x="46" y="380" class="t">Ekran dotykowy 800×480</text>
+    <text x="46" y="400" class="s">podgląd, menu kafelkowe,</text>
+    <text x="46" y="416" class="s">wygaszanie po bezczynności</text>
+
+    <rect x="30" y="446" width="230" height="74" rx="9" fill="#eef1f5" stroke="#bfc6d2"/>
+    <text x="46" y="474" class="t">Pendrive USB</text>
+    <text x="46" y="494" class="s">zdjęcia, plates.db, dashcam,</text>
+    <text x="46" y="510" class="s">radar, kopie zapasowe</text>
+
+    <rect x="30" y="540" width="230" height="74" rx="9" fill="#eef1f5" stroke="#bfc6d2"/>
+    <text x="46" y="568" class="t">Dźwięk</text>
+    <text x="46" y="588" class="s">głośnik PAM8302 lub zestaw</text>
+    <text x="46" y="604" class="s">audio auta przez Bluetooth</text>
+  </g>
+
+  <!-- tor obrazu -->
+  <rect x="320" y="74" width="270" height="64" rx="8" fill="#f2f5fc" stroke="#c4cfea"/>
+  <text x="336" y="100" class="t">Picamera2: dwa strumienie ISP</text>
+  <text x="336" y="120" class="s">main 2304×1296 → pierścień 1 s</text>
+  
+  <rect x="320" y="160" width="270" height="64" rx="8" fill="#f2f5fc" stroke="#c4cfea"/>
+  <text x="336" y="186" class="t">GStreamer (hailo-apps)</text>
+  <text x="336" y="206" class="s">lores 1280×720 → detekcja → ByteTrack</text>
+
+  <rect x="320" y="246" width="270" height="64" rx="8" fill="#f2f5fc" stroke="#c4cfea"/>
+  <text x="336" y="272" class="t">TrackManager</text>
+  <text x="336" y="292" class="s">strefa ROI, najlepsza klatka, cykl życia</text>
+
+  <rect x="320" y="332" width="270" height="78" rx="8" fill="#f2f5fc" stroke="#c4cfea"/>
+  <text x="336" y="358" class="t">OcrWorker</text>
+  <text x="336" y="378" class="s">fast-plate-ocr (CPU) lub Hailo,</text>
+  <text x="336" y="394" class="s">tekst + pewność każdego znaku</text>
+
+  <rect x="320" y="432" width="270" height="78" rx="8" fill="#f2f5fc" stroke="#c4cfea"/>
+  <text x="336" y="458" class="t">Konsensus odczytów</text>
+  <text x="336" y="478" class="s">grupy Levenshtein ≤ 1, wagi: pewność</text>
+  <text x="336" y="494" class="s">OCR i wielkość tablicy, min. 3 zgodne</text>
+
+  <rect x="320" y="532" width="270" height="64" rx="8" fill="#f2f5fc" stroke="#c4cfea"/>
+  <text x="336" y="558" class="t">SaveWorker</text>
+  <text x="336" y="578" class="s">JPG + wycinek + SQLite (WAL)</text>
+
+  <!-- prawa kolumna wewnątrz pi -->
+  <rect x="620" y="74" width="270" height="64" rx="8" fill="#f1f8f1" stroke="#a9d1ad"/>
+  <text x="636" y="100" class="t">Wideorejestrator</text>
+  <text x="636" y="120" class="s">co 2. klatka → x264 → segmenty 60 s</text>
+
+  <rect x="620" y="160" width="270" height="78" rx="8" fill="#fdf3ee" stroke="#eab295"/>
+  <text x="636" y="186" class="t">RadarWorker</text>
+  <text x="636" y="206" class="s">próbki V±, filtr szpilek, mediana,</text>
+  <text x="636" y="222" class="s">okno 15 s na tablicę</text>
+
+  <rect x="620" y="260" width="270" height="78" rx="8" fill="#fdf3ee" stroke="#eab295"/>
+  <text x="636" y="286" class="t">Prędkość z kamery</text>
+  <text x="636" y="306" class="s">d = K / szerokość tablicy [px],</text>
+  <text x="636" y="322" class="s">regresja d(t) → wybór auta</text>
+
+  <rect x="620" y="432" width="270" height="78" rx="8" fill="#f6f0fb" stroke="#c9b1e3"/>
+  <text x="636" y="458" class="t">Bazy obserwowanych</text>
+  <text x="636" y="478" class="s">grupy (np. znajomi), dopasowanie</text>
+  <text x="636" y="494" class="s">dokładne i po mylonych znakach</text>
+
+  <rect x="620" y="532" width="270" height="64" rx="8" fill="#f6f0fb" stroke="#c9b1e3"/>
+  <text x="636" y="558" class="t">Alert</text>
+  <text x="636" y="578" class="s">baner + zdjęcie auta + Piper TTS</text>
+
+  <rect x="320" y="626" width="570" height="104" rx="8" fill="#f4f5f7" stroke="#cfd4dd"/>
+  <text x="336" y="652" class="t">Usługi w tle</text>
+  <text x="336" y="674" class="s">Flask :80 (podgląd MJPEG, historia, weryfikacja, ustawienia) · watchdog systemd</text>
+  <text x="336" y="692" class="s">strażnik priorytetów wątków · rotacja nagrań · kopie bazy co 30 min</text>
+  <text x="336" y="710" class="s">przeprowadzka danych z karty SD na pendrive · Bluetooth (malinka jako głośnik)</text>
+
+  <!-- wyjścia -->
+  <rect x="940" y="74" width="230" height="74" rx="9" fill="#ffffff" stroke="#bfc6d2"/>
+  <text x="956" y="102" class="t">Telefon / PC</text>
+  <text x="956" y="122" class="s">panel www w sieci lokalnej</text>
+  <text x="956" y="138" class="s">lub przez VPN</text>
+
+  <rect x="940" y="168" width="230" height="74" rx="9" fill="#ffffff" stroke="#bfc6d2"/>
+  <text x="956" y="196" class="t">Zdjęcia z fotoradaru</text>
+  <text x="956" y="216" class="s">kadr + wycinek + prędkość,</text>
+  <text x="956" y="232" class="s">klip z ramką śledzącą</text>
+
+  <rect x="940" y="262" width="230" height="74" rx="9" fill="#ffffff" stroke="#bfc6d2"/>
+  <text x="956" y="290" class="t">Przeglądarka offline</text>
+  <text x="956" y="310" class="s">LPR_Przegladarka.exe na</text>
+  <text x="956" y="326" class="s">pendrivie (Windows)</text>
+
+  <rect x="940" y="356" width="230" height="74" rx="9" fill="#ffffff" stroke="#bfc6d2"/>
+  <text x="956" y="384" class="t">Dane treningowe</text>
+  <text x="956" y="404" class="s">oceny człowieka → nowy</text>
+  <text x="956" y="420" class="s">zbiór OCR i detekcji</text>
+
+  <!-- strzałki: sprzęt -> pi -->
+  <path class="ln" d="M260,107 L318,107"/>
+  <path class="dl" d="M260,200 C290,200 290,192 318,192"/>
+  <path class="ln" d="M260,282 L278,282 L278,149 L605,149 L605,199 L618,199"/>
+  <!-- tor -->
+  <path class="ln" d="M455,138 L455,158"/>
+  <path class="ln" d="M455,224 L455,244"/>
+  <path class="ln" d="M455,310 L455,330"/>
+  <path class="ln" d="M455,410 L455,430"/>
+  <path class="ln" d="M455,510 L455,530"/>
+  <path class="ln" d="M590,100 L618,100"/>
+  <path class="ln" d="M590,288 L618,298"/>
+  <path class="ln" d="M755,238 L755,258"/>
+  <path class="ln" d="M590,470 L618,470"/>
+  <path class="ln" d="M755,510 L755,530"/>
+  <!-- do ekranu, pendrive'a i dźwięku -->
+  <path class="dl" d="M320,292 L292,292 L292,389 L262,389"/>
+  <path class="dl" d="M320,564 L292,564 L292,483 L262,483"/>
+  <path class="dl" d="M755,596 L755,612 L280,612 L280,577 L262,577"/>
+  <!-- wyjścia -->
+  <path class="dl" d="M890,660 L915,660 L915,112 L938,112"/>
+  <path class="ln" d="M890,300 L925,300 L925,205 L938,205"/>
+  <path class="dl" d="M890,700 L930,700 L930,392 L938,392"/>
+</svg>
