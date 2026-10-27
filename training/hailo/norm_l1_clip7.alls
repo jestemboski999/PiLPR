@@ -1,0 +1,8 @@
+input_normalization1 = normalization([127.5, 127.5, 127.5], [127.5, 127.5, 127.5])
+model_optimization_flavor(optimization_level=1, compression_level=0)
+pre_quantization_optimization(activation_clipping, layers={conv*}, mode=percentile, clipping_values=[0.01, 99.99])
+pre_quantization_optimization(activation_clipping, layers={dw*}, mode=percentile, clipping_values=[0.01, 99.99])
+pre_quantization_optimization(activation_clipping, layers={normalization*}, mode=percentile, clipping_values=[0.01, 99.99])
+pre_quantization_optimization(activation_clipping, layers=[conv19, conv20, conv21, conv23, conv24, conv25, conv27, conv28, conv29, conv30, conv31, conv32, conv33, normalization56, normalization61], mode=disabled)
+pre_quantization_optimization(activation_clipping, layers={conv_feature_splitter*}, mode=disabled)
+quantization_param(output_layer1, precision_mode=a16_w16)

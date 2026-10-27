@@ -1,0 +1,27 @@
+__pycache__/
+*.pyc
+*.bak
+
+# dane z jazd: zdjęcia tablic, bazy, nagrania (dane osobowe, nie trafiają do repo)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+logs/
+lpr/
+dashcam/
+radar/
+plates_history/
+
+# modele i artefakty kompilacji (trzymane poza repozytorium)
+*.hef
+*.har
+*.onnx
+*.pt
+*.npz
+*.npy
+
+# lokalna konfiguracja urządzenia (zawiera bazy obserwowanych)
+lpr_runtime_config.json
+
+node_modules/

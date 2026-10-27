@@ -1,0 +1,19 @@
+[Unit]
+Description=LPR — rozpoznawanie tablic rejestracyjnych
+# Po awarii: restart po 5 s, maksymalnie 3 starty w 5 minut (pierwszy + 2 ponowienia).
+# Po wyczerpaniu limitu usluga zostaje wylaczona — reczny start: ikona LPR na pulpicie
+# albo: systemctl --user start lpr
+StartLimitIntervalSec=300
+StartLimitBurst=3
+
+[Service]
+Type=simple
+WorkingDirectory=/home/admin/hailo-apps
+ExecStart=/home/admin/hailo-apps/lpr_run.sh
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:/home/admin/hailo-apps/logs/lpr_service.log
+StandardError=append:/home/admin/hailo-apps/logs/lpr_service.log
+
+[Install]
+WantedBy=default.target

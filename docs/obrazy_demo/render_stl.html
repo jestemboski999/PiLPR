@@ -1,0 +1,21 @@
+<!doctype html><html><body style="margin:0;background:#f7f8fa">
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+const q=new URLSearchParams(location.search); const W=1200,H=800;
+const r=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true}); r.setSize(W,H); r.setClearColor(0xf7f8fa);
+document.body.appendChild(r.domElement);
+const s=new THREE.Scene();
+s.add(new THREE.HemisphereLight(0xffffff,0x8a93a8,1.6));
+const d=new THREE.DirectionalLight(0xffffff,2.2); d.position.set(1,-1.5,2); s.add(d);
+const d2=new THREE.DirectionalLight(0xffffff,0.6); d2.position.set(-2,1,1); s.add(d2);
+new STLLoader().load(q.get('f'),g=>{
+  g.computeVertexNormals(); g.center(); g.computeBoundingSphere();
+  const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:0x3b4f86,roughness:0.55,metalness:0.05}));
+  m.rotation.x=parseFloat(q.get('rx')||'-1.2'); m.rotation.z=parseFloat(q.get('rz')||'0.6'); s.add(m);
+  const R=g.boundingSphere.radius; const c=new THREE.PerspectiveCamera(30,W/H,0.1,R*20);
+  c.position.set(0,-R*0.2,R*3.6); c.lookAt(0,0,0);
+  r.render(s,c); document.title='done';
+});
+</script></body></html>

@@ -1,0 +1,11 @@
+{
+    "detection_threshold": 0.3,
+    "max_boxes": 200,
+    "labels": [
+        "unlabeled",
+        "person",
+        "vehicle",
+        "face",
+        "license_plate"
+    ]
+}
