@@ -45,7 +45,7 @@ Wszystko działa na malince. Nie ma chmury ani konta, jest ekran dotykowy w auci
 
 **Bazy obserwowanych.** Dowolna liczba nazwanych list (na przykład Znajomi, Rodzina albo cokolwiek zaimportowanego z CSV), każda z własnym kolorem i szablonem komunikatu. Trafienie to baner i zdjęcie auta na ekranie oraz komunikat czytany głosem Piper. Dopasowanie jest najpierw dokładne, a potem odporne na znaki, które OCR najczęściej myli (0/O/D, 1/I, 5/S, 8/B). W tym drugim przypadku komunikat zaczyna się wprost od słowa „niepotwierdzony”.
 
-**Ostrzeganie przed nieoznakowanymi radiowozami.** Jedną z baz może być lista pojazdów służbowych, na przykład nieoznakowanych radiowozów. Trafienie daje ten sam alert na ekranie i głosem. Aplikacja nie zawiera żadnej takiej listy. Możesz zaimportować własną z pliku CSV.
+**Ostrzeganie przed nieoznakowanymi radiowozami.** Obok baz znajomych możesz prowadzić dwie listy pojazdów służbowych: „Radiowozy nieoznakowane” i „Pojazdy służbowe”. Trafienie z każdej z nich daje ten sam alert na ekranie i głosem. Aplikacja nie zawiera żadnej takiej listy. Możesz zaimportować własną z pliku CSV.
 
 **Tryb fotoradaru.** Radar dopplerowski HLK-LD2415H na porcie szeregowym mierzy prędkość. Gdy auto przekroczy próg, system czeka na jego tablicę, sprawdza, czy tablica należy do auta zmierzonego przez radar, i zapisuje zdjęcie z naniesioną prędkością, datą, godziną i numerem, a do tego krótki klip z wideorejestratora z ramką, która jedzie za autem.
 

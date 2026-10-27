@@ -45,7 +45,7 @@ Everything runs on the Pi. There is no cloud and no account, just the touch scre
 
 **Watchlists.** Any number of named lists (for example Friends, Family, or anything you import from a CSV), each with its own colour and its own spoken message template. A hit shows a banner and a photo of the car on screen and is read out through a Piper voice. Matching is exact first, and then tolerant of the characters OCR typically confuses (0/O/D, 1/I, 5/S, 8/B), in which case the message explicitly starts with "unconfirmed".
 
-**Unmarked police car warnings.** One of the lists can hold official vehicles, for example unmarked police cars. A hit gives the same alert on screen and by voice. The app ships with no such list; you can import your own from a CSV file.
+**Unmarked police car warnings.** Next to the friends lists you can keep two lists of official vehicles: "Radiowozy nieoznakowane" (unmarked police cars) and "Pojazdy służbowe" (other official vehicles). A hit on either gives the same alert on screen and by voice. The app ships with no such list; you can import your own from a CSV file.
 
 **Speed camera mode.** An HLK-LD2415H Doppler radar on the serial port measures speed. When a car exceeds the threshold, the system waits for its plate, checks that the plate belongs to the car the radar measured, and saves a photo with the speed, date, time and plate burnt in, plus a short clip from the dashcam with a box that follows the car.
 
