@@ -200,3 +200,7 @@ Urządzenie jeździ ze mną w aucie od kwietnia 2026. Co chciałbym zrobić dale
 - osobna, stacjonarna wersja trybu radaru do pomiaru ruchu na osiedlowej ulicy.
 
 Jeśli chcesz zbudować własne, przerobić je albo pogadać o projekcie, załóż issue.
+
+## Licencja
+
+[PolyForm Noncommercial 1.0.0](LICENSE). Kod możesz za darmo używać, poznawać i zmieniać do każdego niekomercyjnego celu: własnych projektów, badań, nauki, budowy urządzenia dla siebie. Użycie w komercyjnym produkcie albo usłudze wymaga osobnej licencji ode mnie, więc jeśli o tym myślisz, załóż issue albo napisz.

@@ -202,3 +202,7 @@ The device has been riding in my car since April 2026. Things I would like to do
 - a separate stationary version of the radar mode for measuring traffic on a residential street.
 
 If you want to build one, adapt it or talk about the project, open an issue.
+
+## License
+
+[PolyForm Noncommercial 1.0.0](LICENSE). You can use, study and modify the code for free for any noncommercial purpose: personal projects, research, education, hobby builds. Using it in a commercial product or service needs a separate license from me, so open an issue or get in touch if that is what you have in mind.
