@@ -63,13 +63,25 @@ def car_rear(w, body=(52,70,98), plate="WX 1234A"):
     hh=int(w*0.82)
     return im,(px/w,py/hh,(px+pw)/w,(py+ph)/hh)
 
-def scene(W=2304,H=1296,plate="WX 1234A",car_w=640,car_cx=0.52,car_by=0.80,body=(52,70,98),seed=3,night=False,extra_cars=True):
+BLOKI=((-40,520,140,(206,200,188)),(470,820,300,(196,182,170)),(1520,1880,280,(200,196,186)),(1830,2360,110,(214,206,196)),(800,1010,380,(186,186,182)),(1320,1530,370,(190,184,176)))
+
+def poswiata(im, punkty):
+    """Dodaje rozmyte światło (x, y, promień, kolor) do obrazu RGB."""
+    if not punkty: return im
+    g=Image.new("RGB",im.size,(0,0,0)); dg=ImageDraw.Draw(g)
+    for x,y,r,c in punkty: dg.ellipse([x-r,y-r,x+r,y+r],fill=c)
+    g=g.filter(ImageFilter.GaussianBlur(max(r for *_,r,_ in punkty)*0.9))
+    a=np.asarray(im).astype(np.int16)+np.asarray(g).astype(np.int16)
+    return Image.fromarray(np.clip(a,0,255).astype(np.uint8))
+
+def scene(W=2304,H=1296,plate="WX 1234A",car_w=640,car_cx=0.52,car_by=0.80,body=(52,70,98),seed=3,night=True,extra_cars=True):
     random.seed(seed)
     im=Image.new("RGB",(W,H)); d=ImageDraw.Draw(im)
     hz=int(H*0.47)
     for y in range(hz):
         t=y/hz
-        c=(int(150+60*t),int(185+45*t),int(222+20*t)) if not night else (int(25+40*t),int(35+45*t),int(60+50*t))
+        # noc w kolorach tapety PiCamera: fiolet u góry, różowa łuna nad horyzontem
+        c=(int(150+60*t),int(185+45*t),int(222+20*t)) if not night else (int(16+66*t**2),int(10+26*t**2),int(24+62*t**2))
         d.line([(0,y),(W,y)],fill=c)
     # bloki osiedla
     def blok(x0,x1,ytop,ybot,col):
@@ -78,28 +90,48 @@ def scene(W=2304,H=1296,plate="WX 1234A",car_w=640,car_cx=0.52,car_by=0.80,body=
         for i in range(nx):
             for j in range(ny):
                 wx=x0+(i+0.25)*(x1-x0)/nx; wy=ytop+(j+0.3)*(ybot-ytop)/ny
-                lit = night and random.random()<0.35
-                d.rectangle([wx,wy,wx+(x1-x0)/nx*0.5,wy+(ybot-ytop)/ny*0.45],
-                            fill=(255,214,140) if lit else tuple(int(c*0.72) for c in col))
-    for x0,x1,yt,col in ((-40,520,140,(206,200,188)),(470,820,300,(196,182,170)),(1520,1880,280,(200,196,186)),(1830,2360,110,(214,206,196)),(800,1010,380,(186,186,182)),(1320,1530,370,(190,184,176))):
-        blok(x0,x1,yt,hz+40,col if not night else tuple(int(c*0.35) for c in col))
+                r_ = random.random()
+                okno = tuple(int(c*0.72) for c in col)
+                if night and r_ < 0.26: okno = (250,206,142)
+                elif night and r_ < 0.33: okno = (126,170,226)
+                d.rectangle([wx,wy,wx+(x1-x0)/nx*0.5,wy+(ybot-ytop)/ny*0.45],fill=okno)
+    for x0,x1,yt,col in BLOKI:
+        blok(x0,x1,yt,hz+40,col if not night else (int(col[0]*0.2),int(col[1]*0.15),int(col[2]*0.26)))
     # drzewa
     for x,r in ((620,120),(330,150),(1700,140),(2050,170),(1040,70),(1290,75)):
-        g=(70,110,62) if not night else (22,36,26)
-        d.ellipse([x-r,hz-r*1.6,x+r,hz+r*0.2],fill=g); d.rectangle([x-10,hz-20,x+10,hz+60],fill=(70,55,45))
+        g=(70,110,62) if not night else (20,18,30)
+        d.ellipse([x-r,hz-r*1.6,x+r,hz+r*0.2],fill=g); d.rectangle([x-10,hz-20,x+10,hz+60],fill=(70,55,45) if not night else (16,12,20))
     # chodniki i jezdnia
     vx=W*0.5
-    d.polygon([(0,hz+30),(W,hz+30),(W,H),(0,H)],fill=(150,148,142) if not night else (52,52,56))
-    d.polygon([(vx-120,hz+30),(vx+120,hz+30),(W*1.02,H),(-W*0.02,H)],fill=(78,80,84) if not night else (34,35,38))
+    d.polygon([(0,hz+30),(W,hz+30),(W,H),(0,H)],fill=(150,148,142) if not night else (42,34,48))
+    d.polygon([(vx-120,hz+30),(vx+120,hz+30),(W*1.02,H),(-W*0.02,H)],fill=(78,80,84) if not night else (27,22,32))
     for k in range(9):
         t0=(k/9)**2; t1=((k+0.45)/9)**2
         y0=hz+30+(H-hz-30)*t0; y1=hz+30+(H-hz-30)*t1
         w0=3+30*t0; w1=3+30*t1
-        d.polygon([(vx-w0,y0),(vx+w0,y0),(vx+w1,y1),(vx-w1,y1)],fill=(235,235,230) if not night else (170,170,165))
+        d.polygon([(vx-w0,y0),(vx+w0,y0),(vx+w1,y1),(vx-w1,y1)],fill=(235,235,230) if not night else (196,184,196))
     # krawężniki
-    d.line([(vx-120,hz+30),(-W*0.02,H)],fill=(190,190,186),width=10)
-    d.line([(vx+120,hz+30),(W*1.02,H)],fill=(190,190,186),width=10)
+    kr=(190,190,186) if not night else (96,82,104)
+    d.line([(vx-120,hz+30),(-W*0.02,H)],fill=kr,width=10)
+    d.line([(vx+120,hz+30),(W*1.02,H)],fill=kr,width=10)
+    lampy=[]
+    if night:
+        for k in range(6):   # gwiazdki na niebie
+            sx,sy=random.uniform(0.05,0.95)*W,random.uniform(0.03,0.2)*H
+            if not any(x0<sx<x1 and sy>yt for x0,x1,yt,_ in BLOKI):
+                d.rectangle([sx-6,sy-1,sx+6,sy+1],fill=(210,196,206)); d.rectangle([sx-1,sy-6,sx+1,sy+6],fill=(210,196,206))
+        for t in (0.18,0.42,0.75):   # latarnie wzdłuż prawej krawędzi
+            for strona in (-1,1):
+                bx=vx+strona*(120+(W*0.52-120)*t)+strona*40*t; by=hz+30+(H-hz-30)*t
+                hp=60+520*t
+                d.line([(bx,by),(bx,by-hp)],fill=(20,16,24),width=int(3+10*t))
+                d.line([(bx,by-hp),(bx-strona*hp*0.18,by-hp)],fill=(20,16,24),width=int(3+8*t))
+                lampy.append((bx-strona*hp*0.18,by-hp+6,10+40*t))
     im=im.filter(ImageFilter.GaussianBlur(1.2))
+    if night:
+        d=ImageDraw.Draw(im)
+        for x,y,r in lampy: d.ellipse([x-r*0.35,y-r*0.2,x+r*0.35,y+r*0.2],fill=(255,226,190))
+        im=poswiata(im,[(x,y,r*3,(120,70,90)) for x,y,r in lampy])
     boxes=[]
     if extra_cars:
         c2,pb2=car_rear(150,(150,150,152),"WX 50000")
@@ -110,6 +142,8 @@ def scene(W=2304,H=1296,plate="WX 1234A",car_w=640,car_cx=0.52,car_by=0.80,body=
     ch=car.size[1]; x=int(W*car_cx-cw/2); y=int(H*car_by-ch)
     im.paste(car,(x,y),car)
     car_box=(x/W,y/H,(x+cw)/W,(y+ch)/H)
+    if night:   # poświata tylnych lamp i oświetlenie tablicy
+        im=poswiata(im,[(x+cw*0.14,y+ch*0.525,cw*0.09,(150,20,40)),(x+cw*0.86,y+ch*0.525,cw*0.09,(150,20,40))])
     plate_box=((x+pb[0]*cw)/W,(y+pb[1]*ch)/H,(x+pb[2]*cw)/W,(y+pb[3]*ch)/H)
     arr=np.array(im).astype(np.float32)
     arr+=np.random.default_rng(seed).normal(0,3.0,arr.shape)
