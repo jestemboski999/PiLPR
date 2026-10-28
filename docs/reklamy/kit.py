@@ -51,7 +51,8 @@ def _stats(f):
 
 
 def device_frame(sc, stan="szukam", tablica="", notif_wiek=None, ostatnia="",
-                 radar=False, radar_v=None, liczba=37, stats=True):
+                 radar=False, radar_v=None, liczba=37, stats=True, radar_prog=40.0,
+                 zegar=None):
     """Klatka ekranu urządzenia (BGR 800×480) dla sceny `sc` z `scena()`.
 
     stan: "nic" (bez ramek), "szukam" (ramka pojazdu + tablica bez odczytu),
@@ -74,10 +75,10 @@ def device_frame(sc, stan="szukam", tablica="", notif_wiek=None, ostatnia="",
         notifs.append({"crop": _crop(rgb, pb), "text": tablica, "t0": now - notif_wiek})
     hud = (1, liczba, (ostatnia, now - 2) if ostatnia else ("", 0.0))
     if radar:
-        L.RADAR_CFG["prog_kmh"] = 40.0
+        L.RADAR_CFG["prog_kmh"] = float(radar_prog)
         v = radar_v or 0.0
-        L._radar_stan.update({"ok": True, "v": v, "t": now, "zdarzen": 4, "otwarte": v > 40})
-        if v > 40:
+        L._radar_stan.update({"ok": True, "v": v, "t": now, "zdarzen": 4, "otwarte": v > radar_prog})
+        if v > radar_prog:
             L._radar_zdarzenie = {"t0": now, "t_ost": now, "czas": datetime.now(), "vmax": v,
                                   "znak": "+", "probek": 9, "v_lista": [v], "zamkniete": False,
                                   "zapisane": False, "kandydaci": []}
@@ -86,7 +87,16 @@ def device_frame(sc, stan="szukam", tablica="", notif_wiek=None, ostatnia="",
     u = _user()
     item = {"frame": rgb, "w": rgb.shape[1], "h": rgb.shape[0], "now": now, "user_data": u,
             "rys": rys, "notifs": notifs, "hud": hud, "web_ip": "", "web_start": 0}
-    L._nakladka_rysuj(item)
+    if zegar is not None:
+        class _DT(datetime):
+            @classmethod
+            def now(cls, tz=None):
+                return zegar
+        L.datetime = _DT
+    try:
+        L._nakladka_rysuj(item)
+    finally:
+        L.datetime = datetime
     f = u.frame
     if stats:
         _stats(f)

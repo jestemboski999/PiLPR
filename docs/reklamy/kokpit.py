@@ -57,12 +57,15 @@ def _perspektywa(rgba, kat=0.10, skos=0.03):
 
 
 def kokpit(scena_rgb, dev_bgr, W=1080, H=1920, ekran_x=0.5, ekran_y=0.66, ekran_szer=0.74,
-           zoom=1.0, dx=0.0, dy=0.0, blur=2.2, kat=0.08, seed=1, swiatlo=1.0, horyzont=None):
+           zoom=1.0, dx=0.0, dy=0.0, blur=2.2, kat=0.08, seed=1, swiatlo=1.0, horyzont=None,
+           lusterko=True, poswiata=(120, 80, 150)):
     """Zwraca PIL RGB W×H: kabina nocą, ekran urządzenia na środku szyby.
 
     scena_rgb: RGB z kit.scena()[0] (to, co widać przez szybę),
     dev_bgr:   klatka 800×480 z kit.device_frame()/kit.menu().
-    zoom/dx/dy pozwalają animować najazd kamery."""
+    zoom/dx/dy pozwalają animować najazd kamery.
+    lusterko=False chowa lusterko wsteczne (miejsce na nagłówek grafiki),
+    poswiata: kolor RGB poświaty ekranu na kabinie (np. zielony przy alercie)."""
     rng = np.random.default_rng(seed)
     if horyzont is None:
         horyzont = 0.36 if H > W else 0.30
@@ -105,9 +108,10 @@ def kokpit(scena_rgb, dev_bgr, W=1080, H=1920, ekran_x=0.5, ekran_y=0.66, ekran_
         d.rounded_rectangle([x, y, x + int(W * 0.07), y + int(H * 0.025)], radius=8, outline=(46, 36, 56, 255), width=2)
     # lusterko wsteczne + noga
     mx = int(W * 0.5)
-    d.rectangle([mx - W // 90, int(H * 0.03), mx + W // 90, int(H * 0.10)], fill=ciem)
-    d.rounded_rectangle([mx - int(W * 0.22), int(H * 0.085), mx + int(W * 0.22), int(H * 0.145)],
-                        radius=int(W * 0.03), fill=(16, 12, 20, 255), outline=(52, 42, 60, 255), width=2)
+    if lusterko:
+        d.rectangle([mx - W // 90, int(H * 0.03), mx + W // 90, int(H * 0.10)], fill=ciem)
+        d.rounded_rectangle([mx - int(W * 0.22), int(H * 0.085), mx + int(W * 0.22), int(H * 0.145)],
+                            radius=int(W * 0.03), fill=(16, 12, 20, 255), outline=(52, 42, 60, 255), width=2)
     # kamera IMX708 przy szybie
     kx, ky = mx + int(W * 0.25), int(H * 0.09)
     d.rounded_rectangle([kx - W // 30, ky - W // 30, kx + W // 30, ky + W // 30], radius=6, fill=(20, 16, 24, 255))
@@ -124,7 +128,7 @@ def kokpit(scena_rgb, dev_bgr, W=1080, H=1920, ekran_x=0.5, ekran_y=0.66, ekran_
     gl = Image.new("L", (W, H), 0)
     ImageDraw.Draw(gl).rounded_rectangle([ex - 20, ey - 20, ex + ek.width + 20, ey + ek.height + 20], radius=40, fill=int(110 * swiatlo))
     gl = gl.filter(ImageFilter.GaussianBlur(W * 0.06))
-    im.paste(Image.new("RGB", (W, H), (120, 80, 150)), (0, 0), gl)
+    im.paste(Image.new("RGB", (W, H), tuple(poswiata)), (0, 0), gl)
     # uchwyt (ramię do deski)
     d = ImageDraw.Draw(im)
     d.polygon([(ex + ek.width * 0.42, ey + ek.height * 0.9), (ex + ek.width * 0.58, ey + ek.height * 0.9),
