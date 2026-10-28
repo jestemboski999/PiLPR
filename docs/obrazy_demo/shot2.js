@@ -1,5 +1,5 @@
 const { chromium } = require('playwright');
-const OUT = require('path').join(__dirname, '..', 'images') + '/';
+const OUT = process.env.LPR_DEMO_OUT || require('path').join(__dirname, '..', 'images') + '/';
 (async () => {
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: 1440, height: 900 } });

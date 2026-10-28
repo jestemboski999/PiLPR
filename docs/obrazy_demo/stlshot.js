@@ -8,7 +8,7 @@ const { chromium } = require('playwright');
     p.on('console', m => console.log(m.text()));
     await p.goto(`http://127.0.0.1:8790/render_stl.html?f=${j.f}&rx=${j.rx}&rz=${j.rz}`);
     await p.waitForFunction(() => document.title === 'done', null, { timeout: 60000 });
-    await p.screenshot({ path: j.out });
+    await p.screenshot({ path: j.out, omitBackground: true });
   }
   await b.close();
 })();
